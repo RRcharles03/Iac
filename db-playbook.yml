@@ -1,4 +1,4 @@
-
+---
 - name: Configurar Servidor de Banco de Dados com MySQL
   hosts: servidores_db
   become: yes  # Garante execução como root
@@ -19,3 +19,15 @@
         name: mysql
         state: started
         enabled: yes
+
+    - name: Criar banco de dados petadota_db
+      mysql_db:
+        name: petadota_db
+        state: present
+
+    - name: Criar usuário petadmin
+      mysql_user:
+        name: petadmin
+        password: "adminpet123"
+        priv: "petadota_db.*:ALL"
+        state: present
