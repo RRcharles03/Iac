@@ -1,0 +1,28 @@
+---
+- name: Configurar Servidor Web com Apache
+  hosts: servidores_web
+  become: yes  # Garante execução como root
+
+  tasks:
+    - name: Atualizar pacotes
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Instalar Apache
+      package:
+        name: apache2
+        state: present
+
+    - name: Iniciar e habilitar Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Abrir porta 80 no firewall
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+      when: ansible_os_family == "Debian"
