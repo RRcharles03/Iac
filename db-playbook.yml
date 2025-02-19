@@ -1,0 +1,21 @@
+
+- name: Configurar Servidor de Banco de Dados com MySQL
+  hosts: servidores_db
+  become: yes  # Garante execução como root
+
+  tasks:
+    - name: Atualizar pacotes
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Instalar MySQL Server
+      package:
+        name: mysql-server
+        state: present
+
+    - name: Iniciar e habilitar MySQL
+      service:
+        name: mysql
+        state: started
+        enabled: yes
